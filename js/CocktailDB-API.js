@@ -1,201 +1,124 @@
-// Lesson 09.03 Cocktail API
+// Lesson 09.03 Cocktail API 
+// in 67 lines of actual code (big array counts as one line; comments, 
+// extra line breaks and console.logs don't count as lines)
 
-// Given cocktail keywords for making select options:
-const cocktailkKeywords = [
-    "Amaretto", "Beer", "Black", "Bloody", "Bourbon", "Fizz",
-    "Brandy", "Cherry", "Chocolate", "Coffee", "Coke", "Cream",
-    "Gin", "Green","Iced", "Island", "Lemon", "Lime", "Liqueur", 
-    "Milk", "Orange", "Red", "Rum", "Salt", "Scotch", "Soda", 
-    "Sour", "Spiced", "Tea", "Tequila", "Vodka", "Whiskey", "Wine",
-    "Royal", "Punch", "Peach", "Cranberry", "Russian", "Captain", 
-    "Port", "Cooler", "Smash", "Cocktail", "Irish", "Jamaican",
-    "Tonic", "Slammer", "Apple", "Grape", "Cider", "High", "Long",
-    "Caribbean", "Hot", "Almond", "Shot", "-", "Sweet", "Old",
-    "Banana", "Classic", "Electric", "Big", "Bermuda", "English",
-    "Italian", "Smoothie", "Ginger", "Banana", "Papaya", "Frozen",
-    "Pineapple", "Kiwi", "Rose", "Blue", "Mojito", "Martini",
-    "French", "Mango", "Negroni", "Golden", "Night", "Cold", 
-    "Mint", "Daiquiri", "Margarita", "Smash", "Shake", " and ", 
-    "Sling", "Berry", "Champagne", "Jack", "Hawaii", "Cordial", 
-    "Fruit", "Spring", "Spice", "Toddy", "Watermelon", "Lassi", "&" 
-];
+// clicking letter buttons gets all drinks that start w that letter
+const letters = "ABCDEFGHIJKLMNOPQRSTVWYZ"; // for making letter buttons (no "U" or "X")
 
-const letters = "ABCDEFGHIJKLMNOPQRSTVWYZ"; // for making letter buttons
-// for (let l = 'A'; l <= 'Z'; l = String.fromCharCode(l.charCodeAt(0) + 1)) {
+// cocktail keywords for making select options:
+const cocktailkKeywords = [ "Amaretto", "Beer", "Black", "Bloody", "Bourbon", "Fizz",
+    "Brandy", "Cherry", "Chocolate", "Coffee", "Coke", "Cream", "Gin", "Green","Iced", "Island", "Lemon", "Lime", "Liqueur", 
+    "Milk", "Orange", "Red", "Rum", "Salt", "Scotch", "Soda", "Sour", "Spiced", "Tea", "Tequila", "Vodka", "Whiskey", "Wine",
+    "Royal", "Punch", "Peach", "Cranberry", "Russian", "Captain", "Port", "Cooler", "Smash", "Cocktail", "Irish", "Jamaican",
+    "Tonic", "Slammer", "Apple", "Grape", "Cider", "High", "Long", "Caribbean", "Hot", "Almond", "Shot", "-", "Sweet", "Old",
+    "Banana", "Classic", "Electric", "Big", "Bermuda", "English", "Italian", "Smoothie", "Ginger", "Banana", "Papaya", "Frozen",
+    "Pineapple", "Kiwi", "Rose", "Blue", "Mojito", "Martini", "French", "Mango", "Negroni", "Golden", "Night", "Cold", 
+    "Mint", "Daiquiri", "Margarita", "Smash", "Shake", " and ", "Sling", "Berry", "Champagne", "Jack", "Hawaii", "Cordial", 
+    "Fruit", "Spring", "Spice", "Toddy", "Watermelon", "Lassi", "&" ];
 
-const btnBox = document.getElementById('letter-button-box');
+cocktailkKeywords.sort(); // sort() array alphabetically, ascending order (A-Z)
+const btnBox = document.getElementById('letter-button-box'); // all letter btns go in here
 
+// split letters string into array and iterate it:
 letters.split("").forEach(e => {
-    const button = document.createElement('button');
-    button.className = 'letter-btn';
-    button.textContent = e; // each btn displays its letter
-    button.id = e.toLowerCase(); // id='a' etc.
-    button.addEventListener('click', getCocktail);
-    btnBox.appendChild(button);
+    const btn = document.createElement('button'); // make a button for the letter
+    btn.className = 'letter-btn';
+    btn.textContent = e; // each btn displays its letter in uppercase
+    btn.id = e.toLowerCase(); // id='a' etc.
+    btn.addEventListener('click', getCocktail); // btn click calls getCocktail function
+    btnBox.appendChild(btn); // append button to btnBox
 });
-cocktailkKeywords.sort(); // sort() menu (A-Z)
 
-const menu = document.getElementById('menu'); // Get the select menu
-// Call getCocktail function when menu is changed
-menu.addEventListener('change', getCocktail);
+const menu = document.getElementById('menu'); // get the select menu
+menu.addEventListener('change', getCocktail); // menu change calls getCocktail function
 
-// Populate menu w options from the cocktailkKeywords array: 
-// Iterate array, making a menu option for each item: 
+// populate menu w options, one per item in cocktailkKeywords array 
+// iterate cocktailkKeywords array, making a menu option for each item: 
 cocktailkKeywords.forEach(e => {
-    const option = document.createElement('option');
-    option.value = e.toLowerCase(); // cordial not Cordial
-    option.text = e;
-    menu.appendChild(option);
+    const option = document.createElement('option'); // make an option
+    option.value = e.toLowerCase(); // lowercase the letter
+    option.text = e; // set the ext to the original word, capitalized
+    menu.appendChild(option); // append option to select menu
 });
 
-// const checkbox = document.getElementById('show-all'); // Get checkbox
-
-const search = document.getElementById('search-box'); // Get search input
-// Call getCocktail function when user hits Enter from inside search box:
-search.addEventListener('search', getCocktail);
-
-// Get the Random Cocktail button:
-const randBtn = document.querySelector('button');
-randBtn.addEventListener('click', getCocktail);
-
-// Get the cocktail box where cocktail(s) appear as divs,
-// one div per cocktail, each div containing img and text:
+const search = document.getElementById('search-box'); // get search input box
+search.addEventListener('search', getCocktail); // type in box and hit Enter to call getCocktail func
+const randBtn = document.querySelector('button'); // get Random Cocktail button
+randBtn.addEventListener('click', getCocktail); // click btn to call getCocktail function
+// get the cocktail box where cocktail(s) appear as divs, one div per cocktail, 
+// each div containing: cocktail name, instrucitons, ingredients list and image
 const cocktailBox = document.getElementById('cocktail-box'); 
 
-// Define the getCocktail function:
 function getCocktail() {
-    // Declare the url variable and set it to the "base url":
+    
+    // start the url variable with the base part that never changes:
     let url = "https:thecocktaildb.com/api/json/v1/1/";
-    // Check if object calling function has a value:
-    // empty search box (empty string "") is falsey:
-    // this.value exists only for select menu AND search box (NOT for btns)
+    // this.value exists only for select menu, and non-empty search box
     if(this.value) { // btns don't have values, but search box and menu do
-        // obj calling function has a value (string)
-        url += `search.php?s=${this.value}`;
-        // so concat that string value onto end of url:
-        // "s=lime" queries db for "lime" in cocktail name
-    } else { // a button called the func BUT what kind of btn: Letter or Random?
-        // if(this.id) { // Random Btn has no id so this.id is false for Random
-            // this is a letter button:
-            // "f=a" queries db for cocktails starting with "a"
-        //     url += `search.php?f=${this.id}`; // f= search by starts with letter
-        // } else { // btn has no id so must be the Rand Btn
-        //     url += `random.php`;
-        // }
-        // OR: a ternary instead of above if-else:
+        url += `search.php?s=${this.value}`; // concat value of obj calling function onto url
+    } else { // a button called the func but what kind of btn: Letter or Random?
+        // ternary: if btn has id, it's a letter btn, else it's random btn; concat accordingly:
         url += this.id ? `search.php?f=${this.id}` : `random.php`;
     }
 
-    // If it's not the search box calling, clear search box:
-    if(this.id != 'search-box') search.value = "";
-
-    // If it's not the menu calling, reset select menu to index 0
-    if(this.id != 'menu') menu.selectedIndex = 0;
-
-    // Send fetch() request with url and GET method:
-    fetch(url, {method:"GET"})
-
-    // .then() No. 1: Handle the response by parsing the json
-    .then(res => res.json())
-
-    // .then() No. 2: Handle the parsed object by outputting data:
-    .then(obj => {
-
+    if(this.id != 'search-box') search.value = ""; // clear search box if it didn't call function
+    if(this.id != 'menu') menu.selectedIndex = 0; // reset menu if it didn't call the function
+    
+    fetch(url, {method:"GET"}) // send fetch() request with url and GET method
+    .then(res => res.json()) // .then() No. 1: Handle the response by parsing the json
+    .then(obj => { // .then() No. 2: Handle the parsed object by outputting data:
         console.log('obj.drinks:', obj.drinks); // result returns one obj called "drinks"
         // the value of which is an array, one array item per drink
-        
-        // Clear the cocktail box from last search:
-        cocktailBox.innerHTML = '';
-
+        cocktailBox.innerHTML = ''; // clear the cocktail box from last search:
         // object has a drinks property, which is an array
-        // Sort results by strDrink key (drink name), from A-Z.
-        // To sort array of objects by string key, use sort()
-        // callback algo with (a,b) (see Sortable Movies for help)
+        // Sort results by strDrink key (drink name), from A-Z:
         obj.drinks.sort((a,b) => a.strDrink > b.strDrink ? 1 : -1);
-    
-        // Iterate the drinks array:
-        obj.drinks.forEach(e => {
-
-            // make drinkDiv to hold drink as picture and text
-            const drinkDiv = document.createElement('div');
-            drinkDiv.className = 'drink-div';
-            cocktailBox.appendChild(drinkDiv);
+        
+        obj.drinks.forEach(e => { // iterate the drinks array:
             
-            // make an h2 to hold drink name and append h1 in drinkDiv
-            const h2 = document.createElement('h2');
+            const drinkDiv = document.createElement('div'); // make div to hold drink pic & text
+            drinkDiv.className = 'drink-div'; // assign div its class
+            cocktailBox.appendChild(drinkDiv); // append drinkDiv to cocktailBox
+            
+            const h2 = document.createElement('h2'); // make h2 to display drink name
             h2.textContent = e.strDrink; // ex: Long Island Iced Tea
-            drinkDiv.appendChild(h2);
-
-            // make drinkInfoP to hold drink info and append it to textDiv
-            const instructionsP = document.createElement('p');
-            instructionsP.textContent = e.strInstructions;
-            drinkDiv.appendChild(instructionsP);
-
-            // make a ul to hold ingredients list and appeand it to textDiv 
-            const ul = document.createElement('ul');
+            drinkDiv.appendChild(h2); // append h2 to drink div as its first child
+            
+            const infoP = document.createElement('p'); // make p-tag to hold drink info
+            infoP.textContent = e.strInstructions; // info consists of instructions
+            drinkDiv.appendChild(infoP); // append info p-tag to drinkDiv
+            const ul = document.createElement('ul'); // make a ul for ingredients list
             // display top 5 ingredients as bulleted list
-            for(let i = 1; i <= 5; i++) {
-                let ingrKey = "strIngredient" + i;
-                let measKey = "strMeasure" + i;
-                if(e[ingrKey]) { // if this ingredient is not null
-                    const li = document.createElement('li');
-                    li.textContent = `${e[ingrKey]} (${e[measKey]})`;
-                    ul.appendChild(li);
-                }
-            }
-            drinkDiv.appendChild(ul);
-
-            const drinkPic = new Image();
-            drinkPic.src = e.strDrinkThumb;
-            drinkDiv.appendChild(drinkPic);
+            // the ingredients exist as separate properties, numbered 1-15
+            // 'strIngredient1': 'rum', 'strIngredient2': 'ginger ale', etc., up to 15
+            // all go up to 'strIngredient15', regardless of actual number of ingredients
+            // unused ingredients are set to null;
+            // strMeasure is the same: from 1-15 ('strMeasure1' - 'strMeasure15')
+            // ingredient and measure numbers correspond to each other, so
+            // to make an li w both, concatenate the matching property numbers
             
-            // loop the ingredients + measures array, where these are consecutive items
-            // increment by += 2 each time to get pairs: ingredient + measure
-            
-                // make li to put in ul; each li is one ingredient
-                // const li = document.createElement('li');
-                // add the ingredient and its measure as the text of the list item:
+            for(let i = 1; i <= 5; i++) { // loop 5 times: only display top 5 ingredients
+                
+                let ingrKey = "strIngredient" + i; // concat ingredient key
+                let measKey = "strMeasure" + i; // concat measure key
+                
+                if(e[ingrKey]) { // if ingredient is not null (if it exists)
+                    const li = document.createElement('li'); // make an li for ingredient
+                    li.textContent = `${e[ingrKey]} (${e[measKey]})`; // text is ingred & measure
+                    ul.appendChild(li); // output li to ul (bulleted list_
+                } // end if
 
-            // the ingredients come in as separate properties: 
-            // 'strIngredient1': 'rum', 'strIngredient2': 'ginger ale', etc.
-            // all obj have same number of 'strIngredientN' properties, so some of them 
-            // are null; this makes outputting ingredients list difficult
-            // start by getting all the non-null ingredients into an array of strings:
-      
-                // if key includes 'strIngredient', it is an ingredient
-                // if drink[key] is true, the key is not null (not falsey)
+            } // end for loop
 
-                // Tequila Sour lists "lemon" twice as an ingredient
-                    // so only push not-yet-included ingredients into array:
-           
-                        // add the correspondingly numberered strMeasure to the array,
-                        // getting the number from the last char of strIngredient
-              
-            // make a new image to hold the drink pic
-            // set its source to strDrinkThumb and append to drinkDiv
+            drinkDiv.appendChild(ul); // append the ul to the drinkDiv
+            const drinkPic = new Image(); // make image to hold the drink pic
+            drinkPic.src = e.strDrinkThumb; // set image source
+            drinkDiv.appendChild(drinkPic); // append image to drinkDiv
 
-        }); // end drinksArr.forEach(e => {
+        }); // end drinksArr.forEach
 
-    }); // .then #2 end
-      
-    // .catch(err => console.log("Something went wrong", err))
-};
+    }) // end second .then()
 
+    .catch(err => console.log("Something went wrong", err)); // finish w error handling
 
-
-// for (let l = 'A'; l <= 'Z'; l = String.fromCharCode(l.charCodeAt(0) + 1)) {
-
-
-// for(let i = 0; i < cocktailkKeywords.length; i++) {
-
-/*
-I added ingredients to the text. This was tricky to do, because the ingredients don't come as an array, which is what you want. Instead, they come in as a bunch of separate properties: "strIngredient1": "rum", "strIngredient2": "ginger ale", -- like that.
-To make it even trickier to get the ingredients in a clean, usable format, all drink objects have the same number of "strIngredient" properties, but with the value set to null when they run out of actual ingredients..
-What we need to do is extract the values of all keys that include the sub-string "strIngredient" AND (&&) whose values are not null.
-To get the ingredient values into a new array, I looped the drink object, key by key, pushing to a new array all those values whose key includes the sub-string "strIngredient"..
-We didn't do much looping of objects by key in this course--we mostly looped arrays--so this is an EXCELLENT example to study closely so as to add "looping objects by key" to your ever-growing repertoire of JS moves:
-I made the ingredients as a bulleted list, so to hold the p tag and list, I made a new div under the h1, called drinkText. Inside drinkText goes the drink info, followed by an h3 that says "ingredients".
-Beneath the h3 comes the bulleted list (ul tag with li tags nested inside). There needs to be one li for each ingredient, so we loop the ingredientsArr, making one li each time.. I used forEach() for this, as opposed to a for loop, just to give you some practice w the forEach() array method.
-Below, the new code for all this is bolded within the context of the entire second then() .. The new sort() code is also bolded in case you missed that upgrade, posted previously to Slack here..
-There is new CSS to go with this, as well. That too is pasted below:
-*/
+} // end function getCocktail()
