@@ -57,7 +57,7 @@ const cocktailBox = document.getElementById('cocktail-box');
 function getCocktail() {
     
     // start the url variable with the base part that never changes:
-    let url = "https:thecocktaildb.com/api/json/v1/1/";
+    let url = "https://www.thecocktaildb.com/api/json/v1/1/";
     // this.value exists only for select menu, and non-empty search box
     if(this.value) { // btns don't have values, but search box and menu do
         url += `search.php?s=${this.value}`; // concat value of obj calling function onto url
